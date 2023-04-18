@@ -2,9 +2,12 @@ namespace VCLForum
 {
     internal static class Program
     {
-        public static RegisterForm registerForm;
-        public static LoginForm loginForm;
-        public static ForumForm forumForm;
+        public static RegisterForm registerForm = new();
+        public static LoginForm loginForm = new();
+        public static ForumForm forumForm = new();
+
+        public static User currentUser;
+        public static bool moderatorMode = false;
 
         [STAThread]
         static void Main()
@@ -12,11 +15,6 @@ namespace VCLForum
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
-
-            registerForm = new RegisterForm();
-            loginForm = new LoginForm();
-            forumForm = new ForumForm();
-
             Application.Run(loginForm);
         }
     }

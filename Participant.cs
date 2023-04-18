@@ -1,6 +1,4 @@
-﻿using MongoDB.Driver;
-
-namespace VCLForum
+﻿namespace VCLForum
 {
     internal class Participant : User
     {
@@ -10,20 +8,23 @@ namespace VCLForum
             : base(email, password, name)
         {
         }
-        public static Participant? Login(string email, string password)
+        public static bool Register(string email, string password)
         {
-            var collection = DBHandler.Instance.Database.GetCollection<Participant>("Participant");
-            var filter = Builders<Participant>.Filter.Eq(par => par.Email, email);
-
-            Participant user = collection.Find(filter).FirstOrDefault();
-
-            if (password == user.Password)
-            {
-                return user;
-            }
-
-            return null;
+            return true;
+        }
+        public override Thread CreateThread(Subforum subforum, string title)
+        {
+            throw new NotImplementedException();
         }
 
+        public override Post AddPost(Thread thread, string content)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Post EditPost(Thread thread, string content)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

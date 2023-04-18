@@ -1,7 +1,4 @@
-﻿using MongoDB.Driver;
-using System.Diagnostics;
-
-namespace VCLForum
+﻿namespace VCLForum
 {
     internal class Moderator : User
     {
@@ -9,27 +6,30 @@ namespace VCLForum
             : base(email, password, name)
         {
         }
-        public static Moderator? Login(string email, string password)
+        public Subforum CreateSubforum(string title)
         {
-            var moderatorCollection = DBHandler.Instance.Database.GetCollection<Moderator>("Moderator");
-            var filter = Builders<Moderator>.Filter.Eq(mod => mod.Email, email);
+            var collection = DBHandler.Instance.Database.GetCollection<Subforum>("Subforum");
 
-            Moderator currentModerator;
-            try
-            {
-                currentModerator = moderatorCollection.Find(filter).First();
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e);
-                return null;
-            }
+            Subforum newSubforum = new(this, title);
+            collection.InsertOne(newSubforum);
 
-            if (password == currentModerator.Password)
-            {
-                return currentModerator;
-            }
-            return null;
+
+
+            return newSubforum;
+        }
+        public override Post AddPost(Thread thread, string content)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Thread CreateThread(Subforum subforum, string title)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Post EditPost(Thread thread, string content)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -24,11 +24,21 @@
             }
 
             this.Cursor = Cursors.WaitCursor;
-            Moderator? mod = Moderator.Login(this.emailInput.Text, this.pwdInput.Text);
 
-            if (mod == null)
+            bool loginState = false;
+
+            if (participantBtn.Checked)
             {
-                MessageBox.Show("Wrong!");
+                loginState = User.Login<Participant>(this.emailInput.Text, this.pwdInput.Text);
+            }
+            else if (moderatorBtn.Checked)
+            {
+                loginState = User.Login<Moderator>(this.emailInput.Text, this.pwdInput.Text);
+            }
+
+            if (loginState == false)
+            {
+                MessageBox.Show("Try again!");
                 this.Cursor = Cursors.Default;
                 return;
             }
