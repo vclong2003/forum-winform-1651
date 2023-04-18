@@ -29,7 +29,7 @@ namespace VCLForum
             {
                 return currentModerator;
             }
-
+            // test
             return null;
         }
     }
