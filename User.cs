@@ -12,14 +12,12 @@ namespace VCLForum
         public string Name { get; set; }
         public string? AvatarUrl { get; set; }
         public DateTime? Dob { get; set; }
-
         public User(string email, string password, string name)
         {
             Email = email;
             Password = password;
             Name = name;
         }
-
         public static bool Login<T>(string email, string password) where T : User //constraint to subclasses of User
         {
             var collection = DBHandler.Instance.Database.GetCollection<T>(typeof(T).Name);
@@ -45,7 +43,6 @@ namespace VCLForum
 
             return false;
         }
-
         public abstract Thread CreateThread(Subforum subforum, string title);
         public abstract Post AddPost(Thread thread, string content);
         public abstract Post EditPost(Thread thread, string content);

@@ -6,44 +6,45 @@
         {
             InitializeComponent();
 
-            this.participantBtn.Checked = true;
+            participantBtn.Checked = true;
         }
 
         private void registerText_Click(object sender, EventArgs e)
         {
-            this.Hide();
+            Hide();
             Program.registerForm.Show();
         }
 
         private void submitBtn_Click(object sender, EventArgs e)
         {
-            if (this.emailInput.Text == "" || this.pwdInput.Text == "")
+            if (emailInput.Text == "" || pwdInput.Text == "")
             {
                 MessageBox.Show("Please fill in all fields!");
                 return;
             }
 
-            this.Cursor = Cursors.WaitCursor;
+            Cursor = Cursors.WaitCursor;
 
             bool loginState = false;
 
             if (participantBtn.Checked)
             {
-                loginState = User.Login<Participant>(this.emailInput.Text, this.pwdInput.Text);
+                loginState = User.Login<Participant>(emailInput.Text, pwdInput.Text);
             }
             else if (moderatorBtn.Checked)
             {
-                loginState = User.Login<Moderator>(this.emailInput.Text, this.pwdInput.Text);
+                loginState = User.Login<Moderator>(emailInput.Text, pwdInput.Text);
             }
+
+            Cursor = Cursors.Default;
 
             if (loginState == false)
             {
                 MessageBox.Show("Try again!");
-                this.Cursor = Cursors.Default;
                 return;
             }
 
-            this.Hide();
+            Hide();
             Program.forumForm.Show();
             return;
         }

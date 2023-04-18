@@ -34,6 +34,8 @@
             pwdInput = new TextBox();
             submitBtn = new Button();
             loginText = new Label();
+            label3 = new Label();
+            nameInput = new TextBox();
             SuspendLayout();
             // 
             // label1
@@ -71,12 +73,13 @@
             // 
             // submitBtn
             // 
-            submitBtn.Location = new Point(461, 152);
+            submitBtn.Location = new Point(465, 133);
             submitBtn.Name = "submitBtn";
-            submitBtn.Size = new Size(94, 29);
+            submitBtn.Size = new Size(210, 29);
             submitBtn.TabIndex = 4;
-            submitBtn.Text = "Register";
+            submitBtn.Text = "Register as participant";
             submitBtn.UseVisualStyleBackColor = true;
+            submitBtn.Click += submitBtn_Click;
             // 
             // loginText
             // 
@@ -88,11 +91,29 @@
             loginText.Text = "Login";
             loginText.Click += loginText_Click;
             // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(243, 98);
+            label3.Name = "label3";
+            label3.Size = new Size(49, 20);
+            label3.TabIndex = 6;
+            label3.Text = "Name";
+            // 
+            // nameInput
+            // 
+            nameInput.Location = new Point(304, 95);
+            nameInput.Name = "nameInput";
+            nameInput.Size = new Size(125, 27);
+            nameInput.TabIndex = 7;
+            // 
             // RegisterForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(nameInput);
+            Controls.Add(label3);
             Controls.Add(loginText);
             Controls.Add(submitBtn);
             Controls.Add(pwdInput);
@@ -115,5 +136,7 @@
         private TextBox pwdInput;
         private Button submitBtn;
         private Label loginText;
+        private Label label3;
+        private TextBox nameInput;
     }
 }
