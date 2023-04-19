@@ -55,6 +55,7 @@ namespace VCLForum
             var filter = Builders<Thread>.Filter.Eq(t => t.Subforum, selectedSubforum);
             var sort = Builders<Thread>.Sort.Descending(t => t.CreatedAt);
 
+            postPanel.Controls.Clear();
             threadPanel.Controls.Clear();
             collection.Find(filter).Sort(sort).ToList().ForEach(t =>
             {
@@ -72,7 +73,7 @@ namespace VCLForum
             var sort = Builders<Post>.Sort.Descending(p => p.PostDate);
 
             postPanel.Controls.Clear();
-            collection.Find(filter).ToList().ForEach(p =>
+            collection.Find(filter).Sort(sort).ToList().ForEach(p =>
             {
                 postPanel.Controls.Add(PostItem(p));
             });
@@ -115,7 +116,7 @@ namespace VCLForum
 
                 if (selectedSubforumPanel != null) selectedSubforumPanel.BackColor = Color.White;
                 selectedSubforumPanel = panel;
-                selectedSubforumPanel.BackColor = Color.AliceBlue;
+                selectedSubforumPanel.BackColor = Color.Gainsboro;
 
                 LoadThread();
             }
@@ -161,7 +162,7 @@ namespace VCLForum
 
                 if (selectedThreadPanel != null) selectedThreadPanel.BackColor = Color.White;
                 selectedThreadPanel = panel;
-                selectedThreadPanel.BackColor = Color.AliceBlue;
+                selectedThreadPanel.BackColor = Color.Gainsboro;
 
                 LoadPost();
             }
@@ -172,21 +173,21 @@ namespace VCLForum
 
             return panel;
         }
-
         private Panel PostItem(Post p)
         {
             var panel = new Panel();
             var creator = new Label();
             var content = new Label();
 
+            panel.AutoSize = true;
             panel.BorderStyle = BorderStyle.FixedSingle;
             panel.Controls.Add(content);
             panel.Controls.Add(creator);
             panel.Cursor = Cursors.Hand;
             panel.Location = new Point(3, 3);
-            panel.MaximumSize = new Size(452, 164);
-            panel.Width = 452;
+            panel.MinimumSize = new Size(452, 0);
             panel.TabIndex = 0;
+            panel.Padding = new Padding(0, 0, 0, 10);
 
             creator.AutoSize = true;
             creator.Font = new Font("Segoe UI", 7.8F, FontStyle.Italic, GraphicsUnit.Point);
@@ -195,10 +196,9 @@ namespace VCLForum
             creator.TabIndex = 0;
             creator.Text = p.Creator.Name + " at " + p.PostDate;
 
-            content.AutoSize = false;
+            content.AutoSize = true;
             content.Location = new Point(3, 32);
-            content.MaximumSize = new Size(panel.Width - 10, 50);
-            content.Width = panel.Width - 10;
+            content.MaximumSize = new Size(panel.Width - 10, 0);
             content.TabIndex = 1;
             content.Text = p.Content;
 

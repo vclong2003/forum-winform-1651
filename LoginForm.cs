@@ -7,6 +7,8 @@
             InitializeComponent();
 
             participantBtn.Checked = true;
+            emailInput.Text = "vclong2003@gmail.com";
+            pwdInput.Text = "12345678";
         }
 
         private void registerText_Click(object sender, EventArgs e)
