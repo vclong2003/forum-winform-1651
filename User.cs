@@ -58,7 +58,7 @@ namespace VCLForum
         {
             var collection = DBHandler.Instance.Database.GetCollection<Post>("Post");
 
-            Post newPost = new Post(this, thread, content);
+            Post newPost = new(this, thread, content);
             collection.InsertOne(newPost);
 
             return newPost;
