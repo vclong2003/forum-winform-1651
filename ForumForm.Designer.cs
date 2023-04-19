@@ -51,7 +51,7 @@
             // 
             subforumListbox.FormattingEnabled = true;
             subforumListbox.ItemHeight = 20;
-            subforumListbox.Location = new Point(12, 52);
+            subforumListbox.Location = new Point(16, 38);
             subforumListbox.Name = "subforumListbox";
             subforumListbox.Size = new Size(243, 384);
             subforumListbox.TabIndex = 0;
@@ -71,7 +71,7 @@
             // 
             threadListbox.FormattingEnabled = true;
             threadListbox.ItemHeight = 20;
-            threadListbox.Location = new Point(276, 52);
+            threadListbox.Location = new Point(280, 38);
             threadListbox.Name = "threadListbox";
             threadListbox.Size = new Size(333, 384);
             threadListbox.TabIndex = 2;
@@ -88,7 +88,7 @@
             // 
             addSubforumGroup.Controls.Add(addSubforumTextbox);
             addSubforumGroup.Controls.Add(addSubforumBtn);
-            addSubforumGroup.Location = new Point(2, 442);
+            addSubforumGroup.Location = new Point(6, 428);
             addSubforumGroup.Name = "addSubforumGroup";
             addSubforumGroup.Size = new Size(253, 70);
             addSubforumGroup.TabIndex = 4;
@@ -99,7 +99,7 @@
             // 
             groupBox1.Controls.Add(addThreadInput);
             groupBox1.Controls.Add(addThreadBtn);
-            groupBox1.Location = new Point(276, 442);
+            groupBox1.Location = new Point(280, 428);
             groupBox1.Name = "groupBox1";
             groupBox1.Size = new Size(333, 70);
             groupBox1.TabIndex = 5;
@@ -127,7 +127,7 @@
             // 
             postListBox.FormattingEnabled = true;
             postListBox.ItemHeight = 20;
-            postListBox.Location = new Point(635, 52);
+            postListBox.Location = new Point(639, 38);
             postListBox.Name = "postListBox";
             postListBox.Size = new Size(480, 284);
             postListBox.TabIndex = 4;
@@ -135,15 +135,17 @@
             // 
             // addPostTextBox
             // 
-            addPostTextBox.Location = new Point(635, 353);
+            addPostTextBox.BackColor = SystemColors.HighlightText;
+            addPostTextBox.BorderStyle = BorderStyle.FixedSingle;
+            addPostTextBox.Location = new Point(639, 339);
             addPostTextBox.Name = "addPostTextBox";
-            addPostTextBox.Size = new Size(380, 153);
+            addPostTextBox.Size = new Size(380, 159);
             addPostTextBox.TabIndex = 6;
             addPostTextBox.Text = "";
             // 
             // addPostBtn
             // 
-            addPostBtn.Location = new Point(1021, 353);
+            addPostBtn.Location = new Point(1025, 339);
             addPostBtn.Name = "addPostBtn";
             addPostBtn.Size = new Size(94, 29);
             addPostBtn.TabIndex = 7;
@@ -153,7 +155,7 @@
             // 
             // editPostBtn
             // 
-            editPostBtn.Location = new Point(1021, 388);
+            editPostBtn.Location = new Point(1025, 374);
             editPostBtn.Name = "editPostBtn";
             editPostBtn.Size = new Size(94, 29);
             editPostBtn.TabIndex = 8;
@@ -164,7 +166,7 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
-            label1.Location = new Point(13, 17);
+            label1.Location = new Point(17, 3);
             label1.Name = "label1";
             label1.Size = new Size(120, 32);
             label1.TabIndex = 9;
@@ -174,7 +176,7 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
-            label2.Location = new Point(276, 17);
+            label2.Location = new Point(280, 3);
             label2.Name = "label2";
             label2.Size = new Size(88, 32);
             label2.TabIndex = 10;
@@ -184,7 +186,7 @@
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
-            label3.Location = new Point(635, 17);
+            label3.Location = new Point(639, 3);
             label3.Name = "label3";
             label3.Size = new Size(58, 32);
             label3.TabIndex = 11;
@@ -194,7 +196,8 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1131, 518);
+            BackColor = Color.White;
+            ClientSize = new Size(1131, 505);
             Controls.Add(label3);
             Controls.Add(label2);
             Controls.Add(label1);
@@ -206,7 +209,9 @@
             Controls.Add(addSubforumGroup);
             Controls.Add(threadListbox);
             Controls.Add(subforumListbox);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
             Name = "ForumForm";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "ForumForm";
             FormClosing += ForumForm_FormClosing;
             Load += ForumForm_Load;

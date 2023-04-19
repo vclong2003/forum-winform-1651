@@ -49,7 +49,7 @@
             // 
             // submitBtn
             // 
-            submitBtn.Location = new Point(478, 134);
+            submitBtn.Location = new Point(348, 232);
             submitBtn.Name = "submitBtn";
             submitBtn.Size = new Size(94, 29);
             submitBtn.TabIndex = 9;
@@ -59,22 +59,22 @@
             // 
             // pwdInput
             // 
-            pwdInput.Location = new Point(321, 156);
+            pwdInput.Location = new Point(291, 157);
             pwdInput.Name = "pwdInput";
-            pwdInput.Size = new Size(125, 27);
+            pwdInput.Size = new Size(215, 27);
             pwdInput.TabIndex = 8;
             // 
             // emailInput
             // 
-            emailInput.Location = new Point(321, 116);
+            emailInput.Location = new Point(291, 117);
             emailInput.Name = "emailInput";
-            emailInput.Size = new Size(125, 27);
+            emailInput.Size = new Size(215, 27);
             emailInput.TabIndex = 7;
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(239, 159);
+            label2.Location = new Point(209, 160);
             label2.Name = "label2";
             label2.Size = new Size(70, 20);
             label2.TabIndex = 6;
@@ -83,7 +83,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(263, 119);
+            label3.Location = new Point(233, 120);
             label3.Name = "label3";
             label3.Size = new Size(46, 20);
             label3.TabIndex = 5;
@@ -92,7 +92,7 @@
             // registerText
             // 
             registerText.AutoSize = true;
-            registerText.Location = new Point(302, 354);
+            registerText.Location = new Point(315, 411);
             registerText.Name = "registerText";
             registerText.Size = new Size(160, 20);
             registerText.TabIndex = 10;
@@ -102,7 +102,7 @@
             // participantBtn
             // 
             participantBtn.AutoSize = true;
-            participantBtn.Location = new Point(275, 260);
+            participantBtn.Location = new Point(299, 190);
             participantBtn.Name = "participantBtn";
             participantBtn.Size = new Size(100, 24);
             participantBtn.TabIndex = 11;
@@ -113,7 +113,7 @@
             // moderatorBtn
             // 
             moderatorBtn.AutoSize = true;
-            moderatorBtn.Location = new Point(381, 260);
+            moderatorBtn.Location = new Point(405, 190);
             moderatorBtn.Name = "moderatorBtn";
             moderatorBtn.Size = new Size(101, 24);
             moderatorBtn.TabIndex = 12;
@@ -125,6 +125,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.White;
             ClientSize = new Size(800, 450);
             Controls.Add(moderatorBtn);
             Controls.Add(participantBtn);
@@ -135,7 +136,9 @@
             Controls.Add(label2);
             Controls.Add(label3);
             Controls.Add(label1);
+            ForeColor = SystemColors.ControlText;
             Name = "LoginForm";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "LoginForm";
             Load += LoginForm_Load;
             ResumeLayout(false);
