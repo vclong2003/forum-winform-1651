@@ -13,18 +13,7 @@
             Subforum newSubforum = new(this, title);
             collection.InsertOne(newSubforum);
 
-
-
             return newSubforum;
-        }
-        public override Post AddPost(Thread thread, string content)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override Thread CreateThread(Subforum subforum, string title)
-        {
-            throw new NotImplementedException();
         }
 
         public override Post EditPost(Thread thread, string content)

@@ -34,7 +34,9 @@ namespace VCLForum
                 return false;
             }
 
-            if (password == user.Password)
+            bool passwordVerify = BCrypt.Net.BCrypt.Verify(password, user.Password);
+
+            if (passwordVerify)
             {
                 Program.currentUser = user;
                 if (user is Moderator) { Program.moderatorMode = true; }
@@ -43,8 +45,24 @@ namespace VCLForum
 
             return false;
         }
-        public abstract Thread CreateThread(Subforum subforum, string title);
-        public abstract Post AddPost(Thread thread, string content);
+        public Thread CreateThread(Subforum subforum, string title)
+        {
+            var collection = DBHandler.Instance.Database.GetCollection<Thread>("Thread");
+
+            Thread newThread = new(this, subforum, title);
+            collection.InsertOne(newThread);
+
+            return newThread;
+        }
+        public Post AddPost(Thread thread, string content)
+        {
+            var collection = DBHandler.Instance.Database.GetCollection<Post>("Post");
+
+            Post newPost = new Post(this, thread, content);
+            collection.InsertOne(newPost);
+
+            return newPost;
+        }
         public abstract Post EditPost(Thread thread, string content);
 
     }
