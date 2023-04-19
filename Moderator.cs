@@ -1,5 +1,8 @@
-﻿namespace VCLForum
+﻿using MongoDB.Bson.Serialization.Attributes;
+
+namespace VCLForum
 {
+    [BsonDiscriminator("Moderator")]
     internal class Moderator : User
     {
         public Moderator(string email, string password, string name)
@@ -14,11 +17,6 @@
             collection.InsertOne(newSubforum);
 
             return newSubforum;
-        }
-
-        public override Post EditPost(Thread thread, string content)
-        {
-            throw new NotImplementedException();
         }
     }
 }

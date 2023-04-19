@@ -1,8 +1,10 @@
-﻿using MongoDB.Driver;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Driver;
 using System.Diagnostics;
 
 namespace VCLForum
 {
+    [BsonDiscriminator("Participant")]
     internal class Participant : User
     {
         public bool IsBanned { get; set; }
@@ -35,11 +37,6 @@ namespace VCLForum
             }
 
             return true;
-        }
-
-        public override Post EditPost(Thread thread, string content)
-        {
-            throw new NotImplementedException();
         }
     }
 }

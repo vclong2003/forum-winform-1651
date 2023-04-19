@@ -28,34 +28,24 @@
         /// </summary>
         private void InitializeComponent()
         {
-            subforumListbox = new ListBox();
             addSubforumBtn = new Button();
-            threadListbox = new ListBox();
             addSubforumTextbox = new TextBox();
             addSubforumGroup = new GroupBox();
             groupBox1 = new GroupBox();
             addThreadInput = new TextBox();
             addThreadBtn = new Button();
-            postListBox = new ListBox();
             addPostTextBox = new RichTextBox();
             addPostBtn = new Button();
             editPostBtn = new Button();
             label1 = new Label();
             label2 = new Label();
             label3 = new Label();
+            subforumPanel = new FlowLayoutPanel();
+            threadPanel = new FlowLayoutPanel();
+            postPanel = new FlowLayoutPanel();
             addSubforumGroup.SuspendLayout();
             groupBox1.SuspendLayout();
             SuspendLayout();
-            // 
-            // subforumListbox
-            // 
-            subforumListbox.FormattingEnabled = true;
-            subforumListbox.ItemHeight = 20;
-            subforumListbox.Location = new Point(16, 38);
-            subforumListbox.Name = "subforumListbox";
-            subforumListbox.Size = new Size(243, 384);
-            subforumListbox.TabIndex = 0;
-            subforumListbox.SelectedIndexChanged += subforumListbox_SelectedIndexChanged;
             // 
             // addSubforumBtn
             // 
@@ -66,16 +56,6 @@
             addSubforumBtn.Text = "Add";
             addSubforumBtn.UseVisualStyleBackColor = true;
             addSubforumBtn.Click += addSubforumBtn_Click;
-            // 
-            // threadListbox
-            // 
-            threadListbox.FormattingEnabled = true;
-            threadListbox.ItemHeight = 20;
-            threadListbox.Location = new Point(280, 38);
-            threadListbox.Name = "threadListbox";
-            threadListbox.Size = new Size(333, 384);
-            threadListbox.TabIndex = 2;
-            threadListbox.SelectedIndexChanged += threadListbox_SelectedIndexChanged;
             // 
             // addSubforumTextbox
             // 
@@ -88,7 +68,7 @@
             // 
             addSubforumGroup.Controls.Add(addSubforumTextbox);
             addSubforumGroup.Controls.Add(addSubforumBtn);
-            addSubforumGroup.Location = new Point(6, 428);
+            addSubforumGroup.Location = new Point(12, 442);
             addSubforumGroup.Name = "addSubforumGroup";
             addSubforumGroup.Size = new Size(253, 70);
             addSubforumGroup.TabIndex = 4;
@@ -99,7 +79,7 @@
             // 
             groupBox1.Controls.Add(addThreadInput);
             groupBox1.Controls.Add(addThreadBtn);
-            groupBox1.Location = new Point(280, 428);
+            groupBox1.Location = new Point(280, 442);
             groupBox1.Name = "groupBox1";
             groupBox1.Size = new Size(333, 70);
             groupBox1.TabIndex = 5;
@@ -123,29 +103,18 @@
             addThreadBtn.UseVisualStyleBackColor = true;
             addThreadBtn.Click += addThreadBtn_Click;
             // 
-            // postListBox
-            // 
-            postListBox.FormattingEnabled = true;
-            postListBox.ItemHeight = 20;
-            postListBox.Location = new Point(639, 38);
-            postListBox.Name = "postListBox";
-            postListBox.Size = new Size(480, 284);
-            postListBox.TabIndex = 4;
-            postListBox.SelectedIndexChanged += postListBox_SelectedIndexChanged;
-            // 
             // addPostTextBox
             // 
             addPostTextBox.BackColor = SystemColors.HighlightText;
-            addPostTextBox.BorderStyle = BorderStyle.FixedSingle;
-            addPostTextBox.Location = new Point(639, 339);
+            addPostTextBox.Location = new Point(626, 407);
             addPostTextBox.Name = "addPostTextBox";
-            addPostTextBox.Size = new Size(380, 159);
+            addPostTextBox.Size = new Size(380, 105);
             addPostTextBox.TabIndex = 6;
             addPostTextBox.Text = "";
             // 
             // addPostBtn
             // 
-            addPostBtn.Location = new Point(1025, 339);
+            addPostBtn.Location = new Point(1012, 407);
             addPostBtn.Name = "addPostBtn";
             addPostBtn.Size = new Size(94, 29);
             addPostBtn.TabIndex = 7;
@@ -155,12 +124,13 @@
             // 
             // editPostBtn
             // 
-            editPostBtn.Location = new Point(1025, 374);
+            editPostBtn.Location = new Point(1012, 442);
             editPostBtn.Name = "editPostBtn";
             editPostBtn.Size = new Size(94, 29);
             editPostBtn.TabIndex = 8;
             editPostBtn.Text = "Update";
             editPostBtn.UseVisualStyleBackColor = true;
+            editPostBtn.Click += editPostBtn_Click;
             // 
             // label1
             // 
@@ -186,29 +156,53 @@
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
-            label3.Location = new Point(639, 3);
+            label3.Location = new Point(619, 3);
             label3.Name = "label3";
             label3.Size = new Size(58, 32);
             label3.TabIndex = 11;
             label3.Text = "Post";
+            // 
+            // subforumPanel
+            // 
+            subforumPanel.AutoScroll = true;
+            subforumPanel.Location = new Point(17, 38);
+            subforumPanel.Name = "subforumPanel";
+            subforumPanel.Size = new Size(250, 398);
+            subforumPanel.TabIndex = 12;
+            // 
+            // threadPanel
+            // 
+            threadPanel.AutoScroll = true;
+            threadPanel.Location = new Point(280, 38);
+            threadPanel.Name = "threadPanel";
+            threadPanel.Size = new Size(333, 398);
+            threadPanel.TabIndex = 13;
+            // 
+            // postPanel
+            // 
+            postPanel.AutoScroll = true;
+            postPanel.Location = new Point(626, 38);
+            postPanel.Name = "postPanel";
+            postPanel.Size = new Size(480, 361);
+            postPanel.TabIndex = 14;
             // 
             // ForumForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
-            ClientSize = new Size(1131, 505);
+            ClientSize = new Size(1115, 524);
+            Controls.Add(postPanel);
+            Controls.Add(threadPanel);
+            Controls.Add(subforumPanel);
             Controls.Add(label3);
             Controls.Add(label2);
             Controls.Add(label1);
             Controls.Add(editPostBtn);
             Controls.Add(addPostBtn);
             Controls.Add(addPostTextBox);
-            Controls.Add(postListBox);
             Controls.Add(groupBox1);
             Controls.Add(addSubforumGroup);
-            Controls.Add(threadListbox);
-            Controls.Add(subforumListbox);
             FormBorderStyle = FormBorderStyle.FixedDialog;
             Name = "ForumForm";
             StartPosition = FormStartPosition.CenterScreen;
@@ -224,21 +218,20 @@
         }
 
         #endregion
-
-        private ListBox subforumListbox;
         private Button addSubforumBtn;
-        private ListBox threadListbox;
         private TextBox addSubforumTextbox;
         private GroupBox addSubforumGroup;
         private GroupBox groupBox1;
         private TextBox addThreadInput;
         private Button addThreadBtn;
-        private ListBox postListBox;
         private RichTextBox addPostTextBox;
         private Button addPostBtn;
         private Button editPostBtn;
         private Label label1;
         private Label label2;
         private Label label3;
+        private FlowLayoutPanel subforumPanel;
+        private FlowLayoutPanel threadPanel;
+        private FlowLayoutPanel postPanel;
     }
 }

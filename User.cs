@@ -1,9 +1,12 @@
 ﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
 using System.Diagnostics;
 
 namespace VCLForum
 {
+    [BsonDiscriminator(RootClass = true)]
+    [BsonKnownTypes(typeof(Participant), typeof(Moderator))]
     internal abstract class User
     {
         public ObjectId Id { get; set; }
