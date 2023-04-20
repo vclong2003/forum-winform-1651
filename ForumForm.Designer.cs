@@ -206,7 +206,7 @@
             FormBorderStyle = FormBorderStyle.FixedDialog;
             Name = "ForumForm";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "ForumForm";
+            Text = "VCLForum";
             FormClosing += ForumForm_FormClosing;
             Load += ForumForm_Load;
             addSubforumGroup.ResumeLayout(false);

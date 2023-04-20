@@ -123,7 +123,7 @@
             Controls.Add(label1);
             Name = "RegisterForm";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "RegisterForm";
+            Text = "VCLForum Register";
             FormClosing += RegisterForm_FormClosing;
             Load += RegisterForm_Load;
             ResumeLayout(false);

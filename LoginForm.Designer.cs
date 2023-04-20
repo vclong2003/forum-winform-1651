@@ -139,7 +139,7 @@
             ForeColor = SystemColors.ControlText;
             Name = "LoginForm";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "LoginForm";
+            Text = "VCLForum Login";
             Load += LoginForm_Load;
             ResumeLayout(false);
             PerformLayout();

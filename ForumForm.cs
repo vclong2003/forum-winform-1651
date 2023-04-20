@@ -1,4 +1,5 @@
 ﻿using MongoDB.Driver;
+using System.Diagnostics;
 
 namespace VCLForum
 {
@@ -79,6 +80,9 @@ namespace VCLForum
             });
 
             Loading(false);
+
+            Task.Run(() => { WatchForPostChanges(); });
+
             return;
         }
 
@@ -222,10 +226,29 @@ namespace VCLForum
 
             return panel;
         }
+        private void AddSubforumToPanel(Subforum s)
+        {
+            var subforumItem = SubforumItem(s);
+            subforumPanel.Controls.Add(subforumItem);
+            subforumPanel.Controls.SetChildIndex(subforumItem, 0);
+        }
+        private void AddThreadToPanel(Thread t)
+        {
+            var threadItem = ThreadItem(t);
+            threadPanel.Controls.Add(threadItem);
+            threadPanel.Controls.SetChildIndex(threadItem, 0);
+        }
+        private void AddPostToPanel(Post p)
+        {
+            var postItem = PostItem(p);
+            postPanel.Controls.Add(postItem);
+            postPanel.Controls.SetChildIndex(postItem, 0);
+        }
 
         private void ClearPostPanel()
         {
             postPanel.Controls.Clear();
+            addPostTextBox.Clear();
             selectedPostPanel = null;
             selectedPost = null;
 
@@ -243,9 +266,9 @@ namespace VCLForum
             var newSubforum = ((Moderator)Program.currentUser).CreateSubforum(addSubforumTextbox.Text);
             if (newSubforum == null) return;
 
-            var subforumItem = SubforumItem(newSubforum);
-            subforumPanel.Controls.Add(subforumItem);
-            subforumPanel.Controls.SetChildIndex(subforumItem, 0);
+            AddSubforumToPanel(newSubforum);
+            addSubforumTextbox.Clear();
+
             return;
         }
 
@@ -262,9 +285,9 @@ namespace VCLForum
             var newThread = Program.currentUser.CreateThread(selectedSubforum, addThreadInput.Text);
             if (newThread == null) return;
 
-            var threadItem = ThreadItem(newThread);
-            threadPanel.Controls.Add(threadItem);
-            threadPanel.Controls.SetChildIndex(threadItem, 0);
+            AddThreadToPanel(newThread);
+            addThreadInput.Clear();
+
             return;
         }
 
@@ -281,9 +304,9 @@ namespace VCLForum
             var newPost = Program.currentUser.AddPost(selectedThread, addPostTextBox.Text);
             if (newPost == null) return;
 
-            var postItem = PostItem(newPost);
-            postPanel.Controls.Add(postItem);
-            postPanel.Controls.SetChildIndex(postItem, 0);
+            AddPostToPanel(newPost);
+            addPostTextBox.Clear();
+
             return;
         }
 
@@ -299,6 +322,33 @@ namespace VCLForum
             postPanel.Controls.RemoveAt(index);
             postPanel.Controls.Add(editedPostItem);
             postPanel.Controls.SetChildIndex(editedPostItem, index);
+            addPostTextBox.Clear();
+        }
+
+        private void WatchForPostChanges()
+        {
+            var collection = DBHandler.Instance.Database.GetCollection<Post>("Post");
+            var options = new ChangeStreamOptions { FullDocument = ChangeStreamFullDocumentOption.UpdateLookup };
+            var pipeline = new EmptyPipelineDefinition<ChangeStreamDocument<Post>>()
+                .Match(change => change.OperationType == ChangeStreamOperationType.Insert && change.FullDocument.Thread == selectedThread);
+            var cursor = collection.Watch(pipeline, options);
+
+            while (selectedThread != null)
+            {
+                if (cursor.MoveNext())
+                {
+                    foreach (var change in cursor.ToEnumerable())
+                    {
+                        var newPost = change.FullDocument;
+                        Debug.WriteLine(newPost.Content);
+                        if (newPost.Creator.Id != Program.currentUser.Id)
+                        {
+                            this.Invoke((MethodInvoker)delegate { AddPostToPanel(newPost); });
+                        }
+                    }
+                }
+                Task.Delay(1000).Wait();
+            }
         }
 
         private void ForumForm_FormClosing(object sender, FormClosingEventArgs e)
