@@ -4,13 +4,14 @@ namespace VCLForum
 {
     public partial class ForumForm : Form
     {
-        private Panel selectedSubforumPanel;
-        private Subforum selectedSubforum;
+        private Panel? selectedSubforumPanel;
+        private Subforum? selectedSubforum;
 
-        private Panel selectedThreadPanel;
-        private Thread selectedThread;
+        private Panel? selectedThreadPanel;
+        private Thread? selectedThread;
 
-        private Post selectedPost;
+        private Panel? selectedPostPanel;
+        private Post? selectedPost;
         public ForumForm()
         {
             InitializeComponent();
@@ -54,7 +55,7 @@ namespace VCLForum
             var filter = Builders<Thread>.Filter.Eq(t => t.Subforum, selectedSubforum);
             var sort = Builders<Thread>.Sort.Descending(t => t.CreatedAt);
 
-            postPanel.Controls.Clear();
+            ClearPostPanel();
             threadPanel.Controls.Clear();
             collection.Find(filter).Sort(sort).ToList().ForEach(t =>
             {
@@ -71,7 +72,7 @@ namespace VCLForum
             var filter = Builders<Post>.Filter.Eq(p => p.Thread, selectedThread);
             var sort = Builders<Post>.Sort.Descending(p => p.PostDate);
 
-            postPanel.Controls.Clear();
+            ClearPostPanel();
             collection.Find(filter).Sort(sort).ToList().ForEach(p =>
             {
                 postPanel.Controls.Add(PostItem(p));
@@ -203,12 +204,32 @@ namespace VCLForum
 
             void HandleClick(object sender, EventArgs e)
             {
+                if (p.Creator.Id != Program.currentUser.Id) return;
 
+                selectedPost = p;
+                if (selectedPostPanel != null) selectedPostPanel.BackColor = Color.White;
+                selectedPostPanel = panel;
+                selectedPostPanel.BackColor = Color.Gainsboro;
+
+                addPostTextBox.Text = p.Content;
+
+                return;
             }
+
+            panel.Click += HandleClick;
+            creator.Click += HandleClick;
+            content.Click += HandleClick;
 
             return panel;
         }
 
+        private void ClearPostPanel()
+        {
+            postPanel.Controls.Clear();
+            selectedPostPanel = null;
+            selectedPost = null;
+
+        }
 
         //Add Subforum
         private void addSubforumBtn_Click(object sender, EventArgs e)
@@ -220,19 +241,18 @@ namespace VCLForum
             }
 
             var newSubforum = ((Moderator)Program.currentUser).CreateSubforum(addSubforumTextbox.Text);
-            if (newSubforum != null)
-            {
-                var subforumItem = SubforumItem(newSubforum);
-                subforumPanel.Controls.Add(subforumItem);
-                subforumPanel.Controls.SetChildIndex(subforumItem, 0);
-            }
+            if (newSubforum == null) return;
 
+            var subforumItem = SubforumItem(newSubforum);
+            subforumPanel.Controls.Add(subforumItem);
+            subforumPanel.Controls.SetChildIndex(subforumItem, 0);
             return;
         }
 
         // Add Thread
         private void addThreadBtn_Click(object sender, EventArgs e)
         {
+            if (selectedSubforum == null) return;
             if (addThreadInput.Text == "")
             {
                 MessageBox.Show("Please enter title!");
@@ -240,19 +260,18 @@ namespace VCLForum
             }
 
             var newThread = Program.currentUser.CreateThread(selectedSubforum, addThreadInput.Text);
-            if (newThread != null)
-            {
-                var threadItem = ThreadItem(newThread);
-                threadPanel.Controls.Add(threadItem);
-                threadPanel.Controls.SetChildIndex(threadItem, 0);
-            }
+            if (newThread == null) return;
 
+            var threadItem = ThreadItem(newThread);
+            threadPanel.Controls.Add(threadItem);
+            threadPanel.Controls.SetChildIndex(threadItem, 0);
             return;
         }
 
         // Add Post
         private void addPostBtn_Click(object sender, EventArgs e)
         {
+            if (selectedThread == null) return;
             if (addPostTextBox.Text == "")
             {
                 MessageBox.Show("Please enter content!");
@@ -260,21 +279,26 @@ namespace VCLForum
             }
 
             var newPost = Program.currentUser.AddPost(selectedThread, addPostTextBox.Text);
+            if (newPost == null) return;
 
-            if (newPost != null)
-            {
-                var postItem = PostItem(newPost);
-                postPanel.Controls.Add(postItem);
-                postPanel.Controls.SetChildIndex(postItem, 0);
-            }
-
+            var postItem = PostItem(newPost);
+            postPanel.Controls.Add(postItem);
+            postPanel.Controls.SetChildIndex(postItem, 0);
             return;
-
         }
 
+        // Edit post
         private void editPostBtn_Click(object sender, EventArgs e)
         {
+            if (selectedPost == null) return;
 
+            var editedPost = Program.currentUser.EditPost(selectedPost, addPostTextBox.Text);
+            var editedPostItem = PostItem(editedPost);
+
+            int index = postPanel.Controls.IndexOf(selectedPostPanel);
+            postPanel.Controls.RemoveAt(index);
+            postPanel.Controls.Add(editedPostItem);
+            postPanel.Controls.SetChildIndex(editedPostItem, index);
         }
 
         private void ForumForm_FormClosing(object sender, FormClosingEventArgs e)

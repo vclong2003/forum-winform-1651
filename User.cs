@@ -66,7 +66,7 @@ namespace VCLForum
 
             return newPost;
         }
-        public Post EditPost(Post post, Thread thread, string content)
+        public Post EditPost(Post post, string content)
         {
             var collection = DBHandler.Instance.Database.GetCollection<Post>("Post");
 
@@ -76,10 +76,10 @@ namespace VCLForum
             }
 
             var filter = Builders<Post>.Filter.Eq(p => p.Id, post.Id);
-            var update = Builders<Post>.Update.Set(p => post.Content, content);
+            var update = Builders<Post>.Update.Set(p => p.Content, content);
             var options = new FindOneAndUpdateOptions<Post> { ReturnDocument = ReturnDocument.After };
 
-            return collection.FindOneAndUpdate(filter, update);
+            return collection.FindOneAndUpdate(filter, update, options);
         }
 
     }
