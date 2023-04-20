@@ -1,5 +1,4 @@
 ﻿using MongoDB.Driver;
-using System.Diagnostics;
 
 namespace VCLForum
 {
@@ -17,6 +16,11 @@ namespace VCLForum
             InitializeComponent();
             addSubforumGroup.Visible = false;
         }
+        private void ForumForm_Load(object sender, EventArgs e)
+        {
+            addSubforumGroup.Visible = Program.moderatorMode;
+            LoadSubforum();
+        }
         private void Loading(bool isLoading)
         {
             if (isLoading)
@@ -27,11 +31,6 @@ namespace VCLForum
 
             Cursor = Cursors.Default;
             return;
-        }
-        private void ForumForm_Load(object sender, EventArgs e)
-        {
-            addSubforumGroup.Visible = Program.moderatorMode;
-            LoadSubforum();
         }
         private void LoadSubforum()
         {
@@ -209,11 +208,9 @@ namespace VCLForum
 
             return panel;
         }
-        private void ForumForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            Environment.Exit(0);
-        }
 
+
+        //Add Subforum
         private void addSubforumBtn_Click(object sender, EventArgs e)
         {
             if (addSubforumTextbox.Text == "")
@@ -222,19 +219,18 @@ namespace VCLForum
                 return;
             }
 
-            ((Moderator)Program.currentUser).CreateSubforum(addSubforumTextbox.Text);
-            LoadSubforum();
+            var newSubforum = ((Moderator)Program.currentUser).CreateSubforum(addSubforumTextbox.Text);
+            if (newSubforum != null)
+            {
+                var subforumItem = SubforumItem(newSubforum);
+                subforumPanel.Controls.Add(subforumItem);
+                subforumPanel.Controls.SetChildIndex(subforumItem, 0);
+            }
+
             return;
         }
 
-
-        private void subforumListbox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            //selectedSubforum = subforums[subforumListbox.SelectedIndex];
-            LoadThread();
-            Debug.WriteLine(selectedSubforum.Title);
-        }
-
+        // Add Thread
         private void addThreadBtn_Click(object sender, EventArgs e)
         {
             if (addThreadInput.Text == "")
@@ -243,11 +239,18 @@ namespace VCLForum
                 return;
             }
 
-            Program.currentUser.CreateThread(selectedSubforum, addThreadInput.Text);
-            LoadThread();
+            var newThread = Program.currentUser.CreateThread(selectedSubforum, addThreadInput.Text);
+            if (newThread != null)
+            {
+                var threadItem = ThreadItem(newThread);
+                threadPanel.Controls.Add(threadItem);
+                threadPanel.Controls.SetChildIndex(threadItem, 0);
+            }
+
             return;
         }
 
+        // Add Post
         private void addPostBtn_Click(object sender, EventArgs e)
         {
             if (addPostTextBox.Text == "")
@@ -256,29 +259,27 @@ namespace VCLForum
                 return;
             }
 
-            Program.currentUser.AddPost(selectedThread, addPostTextBox.Text);
-            LoadPost();
+            var newPost = Program.currentUser.AddPost(selectedThread, addPostTextBox.Text);
+
+            if (newPost != null)
+            {
+                var postItem = PostItem(newPost);
+                postPanel.Controls.Add(postItem);
+                postPanel.Controls.SetChildIndex(postItem, 0);
+            }
+
             return;
-
-        }
-
-        private void threadListbox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void postListBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-        }
-
-        private void subforumPanel_Paint(object sender, PaintEventArgs e)
-        {
 
         }
 
         private void editPostBtn_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void ForumForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Environment.Exit(0);
         }
     }
 }
