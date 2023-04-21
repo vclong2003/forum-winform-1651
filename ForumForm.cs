@@ -13,10 +13,14 @@ namespace VCLForum
 
         private Panel? selectedPostPanel;
         private Post? selectedPost;
+
+        private CancellationTokenSource cancellationTokenSource;
+
         public ForumForm()
         {
             InitializeComponent();
             addSubforumGroup.Visible = false;
+            cancellationTokenSource = new CancellationTokenSource();
         }
         private void ForumForm_Load(object sender, EventArgs e)
         {
@@ -69,6 +73,7 @@ namespace VCLForum
         private void LoadPost()
         {
             Loading(true);
+
             var collection = DBHandler.Instance.Database.GetCollection<Post>("Post");
             var filter = Builders<Post>.Filter.Eq(p => p.Thread, selectedThread);
             var sort = Builders<Post>.Sort.Descending(p => p.PostDate);
@@ -79,10 +84,11 @@ namespace VCLForum
                 postPanel.Controls.Add(PostItem(p));
             });
 
+            cancellationTokenSource.Cancel();
+            cancellationTokenSource = new CancellationTokenSource();
+            Task.Run(() => WatchForPostChanges(cancellationTokenSource.Token));
+
             Loading(false);
-
-            Task.Run(() => { WatchForPostChanges(); });
-
             return;
         }
 
@@ -247,11 +253,10 @@ namespace VCLForum
 
         private void ClearPostPanel()
         {
-            postPanel.Controls.Clear();
-            addPostTextBox.Clear();
             selectedPostPanel = null;
             selectedPost = null;
-
+            postPanel.Controls.Clear();
+            addPostTextBox.Clear();
         }
 
         //Add Subforum
@@ -325,20 +330,21 @@ namespace VCLForum
             addPostTextBox.Clear();
         }
 
-        private void WatchForPostChanges()
+        private void WatchForPostChanges(CancellationToken cancelToken)
         {
             var collection = DBHandler.Instance.Database.GetCollection<Post>("Post");
             var options = new ChangeStreamOptions { FullDocument = ChangeStreamFullDocumentOption.UpdateLookup };
             var pipeline = new EmptyPipelineDefinition<ChangeStreamDocument<Post>>()
-                .Match(change => change.OperationType == ChangeStreamOperationType.Insert && change.FullDocument.Thread == selectedThread);
+               .Match(change => change.OperationType == ChangeStreamOperationType.Insert && change.FullDocument.Thread == selectedThread);
             var cursor = collection.Watch(pipeline, options);
 
-            while (selectedThread != null)
+            while (true)
             {
                 if (cursor.MoveNext())
                 {
                     foreach (var change in cursor.ToEnumerable())
                     {
+                        if (cancelToken.IsCancellationRequested) return;
                         var newPost = change.FullDocument;
                         Debug.WriteLine(newPost.Content);
                         if (newPost.Creator.Id != Program.currentUser.Id)
@@ -347,7 +353,6 @@ namespace VCLForum
                         }
                     }
                 }
-                Task.Delay(1000).Wait();
             }
         }
 
