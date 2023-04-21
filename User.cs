@@ -15,22 +15,21 @@ namespace VCLForum
         public string Name { get; set; }
         public string? AvatarUrl { get; set; }
         public DateTime? Dob { get; set; }
+
         public User(string email, string password, string name)
         {
             Email = email;
             Password = password;
             Name = name;
         }
+
         public static bool Login<T>(string email, string password) where T : User //constraint to subclasses of User
         {
             var collection = DBHandler.Instance.Database.GetCollection<T>(typeof(T).Name);
             var filter = Builders<T>.Filter.Eq(user => user.Email, email);
 
             T user;
-            try
-            {
-                user = collection.Find(filter).First();
-            }
+            try { user = collection.Find(filter).First(); }
             catch (Exception e)
             {
                 Debug.WriteLine(e);
@@ -48,6 +47,7 @@ namespace VCLForum
 
             return false;
         }
+
         public Thread CreateThread(Subforum subforum, string title)
         {
             var collection = DBHandler.Instance.Database.GetCollection<Thread>("Thread");
@@ -57,6 +57,7 @@ namespace VCLForum
 
             return newThread;
         }
+
         public Post AddPost(Thread thread, string content)
         {
             var collection = DBHandler.Instance.Database.GetCollection<Post>("Post");
@@ -66,14 +67,12 @@ namespace VCLForum
 
             return newPost;
         }
+
         public Post EditPost(Post post, string content)
         {
             var collection = DBHandler.Instance.Database.GetCollection<Post>("Post");
 
-            if (post.Creator.Id != this.Id)
-            {
-                throw new InvalidOperationException("Not your post!");
-            }
+            if (post.Creator.Id != this.Id) { throw new InvalidOperationException("Not your post!"); }
 
             var filter = Builders<Post>.Filter.Eq(p => p.Id, post.Id);
             var update = Builders<Post>.Update.Set(p => p.Content, content);
@@ -81,6 +80,5 @@ namespace VCLForum
 
             return collection.FindOneAndUpdate(filter, update, options);
         }
-
     }
 }

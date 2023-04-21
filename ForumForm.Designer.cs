@@ -43,6 +43,7 @@
             subforumPanel = new FlowLayoutPanel();
             threadPanel = new FlowLayoutPanel();
             postPanel = new FlowLayoutPanel();
+            reloadBtn = new Button();
             addSubforumGroup.SuspendLayout();
             groupBox1.SuspendLayout();
             SuspendLayout();
@@ -186,12 +187,24 @@
             postPanel.Size = new Size(480, 361);
             postPanel.TabIndex = 14;
             // 
+            // reloadBtn
+            // 
+            reloadBtn.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            reloadBtn.Location = new Point(1066, 3);
+            reloadBtn.Name = "reloadBtn";
+            reloadBtn.Size = new Size(37, 32);
+            reloadBtn.TabIndex = 15;
+            reloadBtn.Text = "↻";
+            reloadBtn.UseVisualStyleBackColor = true;
+            reloadBtn.Click += reloadBtn_Click;
+            // 
             // ForumForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
             ClientSize = new Size(1115, 524);
+            Controls.Add(reloadBtn);
             Controls.Add(postPanel);
             Controls.Add(threadPanel);
             Controls.Add(subforumPanel);
@@ -233,5 +246,6 @@
         private FlowLayoutPanel subforumPanel;
         private FlowLayoutPanel threadPanel;
         private FlowLayoutPanel postPanel;
+        private Button reloadBtn;
     }
 }

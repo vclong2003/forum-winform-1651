@@ -6,9 +6,8 @@ namespace VCLForum
     internal class Moderator : User
     {
         public Moderator(string email, string password, string name)
-            : base(email, password, name)
-        {
-        }
+            : base(email, password, name) { }
+
         public Subforum CreateSubforum(string title)
         {
             var collection = DBHandler.Instance.Database.GetCollection<Subforum>("Subforum");

@@ -10,26 +10,19 @@ namespace VCLForum
         public bool IsBanned { get; set; }
 
         public Participant(string email, string password, string name)
-            : base(email, password, name)
-        {
-        }
+            : base(email, password, name) { }
+
         public static bool Register(string name, string email, string password)
         {
             var collection = DBHandler.Instance.Database.GetCollection<Participant>("Participant");
             var filter = Builders<Participant>.Filter.Eq(user => user.Email, email);
             var cursor = collection.Find(filter);
 
-            if (cursor.Any())
-            {
-                return false;
-            }
+            if (cursor.Any()) return false;
 
             string hashedPassword = BCrypt.Net.BCrypt.HashPassword(password);
 
-            try
-            {
-                collection.InsertOne(new Participant(email, hashedPassword, name));
-            }
+            try { collection.InsertOne(new Participant(email, hashedPassword, name)); }
             catch (Exception e)
             {
                 Debug.WriteLine(e);

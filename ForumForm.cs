@@ -14,20 +14,22 @@ namespace VCLForum
         private Panel? selectedPostPanel;
         private Post? selectedPost;
 
-        private CancellationTokenSource cancellationTokenSource;
+        private CancellationTokenSource postsListenerCancelationTokenSource;
 
         public ForumForm()
         {
             InitializeComponent();
             addSubforumGroup.Visible = false;
-            cancellationTokenSource = new CancellationTokenSource();
+            postsListenerCancelationTokenSource = new CancellationTokenSource();
         }
         private void ForumForm_Load(object sender, EventArgs e)
         {
             addSubforumGroup.Visible = Program.moderatorMode;
+            this.Text += " - Logged in as " + Program.currentUser.Name;
             LoadSubforum();
         }
-        private void Loading(bool isLoading)
+
+        private void Loading(bool isLoading) // Loading cursor
         {
             if (isLoading)
             {
@@ -84,9 +86,9 @@ namespace VCLForum
                 postPanel.Controls.Add(PostItem(p));
             });
 
-            cancellationTokenSource.Cancel();
-            cancellationTokenSource = new CancellationTokenSource();
-            Task.Run(() => WatchForPostChanges(cancellationTokenSource.Token));
+            postsListenerCancelationTokenSource.Cancel();
+            postsListenerCancelationTokenSource = new CancellationTokenSource();
+            Task.Run(() => WatchForPostChanges(postsListenerCancelationTokenSource.Token));
 
             Loading(false);
             return;
@@ -232,6 +234,7 @@ namespace VCLForum
 
             return panel;
         }
+
         private void AddSubforumToPanel(Subforum s)
         {
             var subforumItem = SubforumItem(s);
@@ -251,6 +254,7 @@ namespace VCLForum
             postPanel.Controls.SetChildIndex(postItem, 0);
         }
 
+        // Clear the posts in UI
         private void ClearPostPanel()
         {
             selectedPostPanel = null;
@@ -259,7 +263,7 @@ namespace VCLForum
             addPostTextBox.Clear();
         }
 
-        //Add Subforum
+        // Add Subforum
         private void addSubforumBtn_Click(object sender, EventArgs e)
         {
             if (addSubforumTextbox.Text == "")
@@ -330,6 +334,7 @@ namespace VCLForum
             addPostTextBox.Clear();
         }
 
+        // Listen for post collection in DB
         private void WatchForPostChanges(CancellationToken cancelToken)
         {
             var collection = DBHandler.Instance.Database.GetCollection<Post>("Post");
@@ -354,6 +359,15 @@ namespace VCLForum
                     }
                 }
             }
+        }
+
+        // Reload
+        private void reloadBtn_Click(object sender, EventArgs e)
+        {
+            selectedThread = null;
+            selectedThreadPanel = null;
+            ClearPostPanel();
+            LoadThread();
         }
 
         private void ForumForm_FormClosing(object sender, FormClosingEventArgs e)
