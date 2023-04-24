@@ -50,7 +50,7 @@ namespace VCLForum
 
         public Thread CreateThread(Subforum subforum, string title)
         {
-            var collection = DBHandler.Instance.Database.GetCollection<Thread>("Thread");
+            var collection = DBHandler.Instance.Database.GetCollection<Thread>(typeof(Thread).Name);
 
             Thread newThread = new(this, subforum, title);
             collection.InsertOne(newThread);
@@ -60,7 +60,7 @@ namespace VCLForum
 
         public Post AddPost(Thread thread, string content)
         {
-            var collection = DBHandler.Instance.Database.GetCollection<Post>("Post");
+            var collection = DBHandler.Instance.Database.GetCollection<Post>(typeof(Post).Name);
 
             Post newPost = new(this, thread, content);
             collection.InsertOne(newPost);
@@ -70,7 +70,7 @@ namespace VCLForum
 
         public Post EditPost(Post post, string content)
         {
-            var collection = DBHandler.Instance.Database.GetCollection<Post>("Post");
+            var collection = DBHandler.Instance.Database.GetCollection<Post>(typeof(Post).Name);
 
             if (post.Creator.Id != this.Id) { throw new InvalidOperationException("Not your post!"); }
 

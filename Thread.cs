@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace VCLForum
 {
@@ -8,6 +9,7 @@ namespace VCLForum
         public User Creator { get; set; }
         public Subforum Subforum { get; set; }
         public string Title { get; set; }
+        [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
         public DateTime CreatedAt { get; set; }
 
         public int postCount;
@@ -19,7 +21,7 @@ namespace VCLForum
             Subforum = subforum;
             Title = title;
 
-            this.CreatedAt = DateTime.Now;
+            this.CreatedAt = DateTime.UtcNow.ToLocalTime();
         }
     }
 }

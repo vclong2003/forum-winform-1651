@@ -43,7 +43,7 @@ namespace VCLForum
         private void LoadSubforum()
         {
             Loading(true);
-            var collection = DBHandler.Instance.Database.GetCollection<Subforum>("Subforum");
+            var collection = DBHandler.Instance.Database.GetCollection<Subforum>(typeof(Subforum).Name);
             var filter = Builders<Subforum>.Filter.Empty;
 
             subforumPanel.Controls.Clear();
@@ -58,7 +58,7 @@ namespace VCLForum
         private void LoadThread()
         {
             Loading(true);
-            var collection = DBHandler.Instance.Database.GetCollection<Thread>("Thread");
+            var collection = DBHandler.Instance.Database.GetCollection<Thread>(typeof(Thread).Name);
             var filter = Builders<Thread>.Filter.Eq(t => t.Subforum, selectedSubforum);
             var sort = Builders<Thread>.Sort.Descending(t => t.CreatedAt);
 
@@ -76,7 +76,7 @@ namespace VCLForum
         {
             Loading(true);
 
-            var collection = DBHandler.Instance.Database.GetCollection<Post>("Post");
+            var collection = DBHandler.Instance.Database.GetCollection<Post>(typeof(Post).Name);
             var filter = Builders<Post>.Filter.Eq(p => p.Thread, selectedThread);
             var sort = Builders<Post>.Sort.Descending(p => p.PostDate);
 
@@ -310,7 +310,9 @@ namespace VCLForum
                 return;
             }
 
+            Loading(true);
             var newPost = Program.currentUser.AddPost(selectedThread, addPostTextBox.Text);
+            Loading(false);
             if (newPost == null) return;
 
             AddPostToPanel(newPost);
@@ -324,9 +326,11 @@ namespace VCLForum
         {
             if (selectedPost == null) return;
 
+            Loading(true);
             var editedPost = Program.currentUser.EditPost(selectedPost, addPostTextBox.Text);
-            var editedPostItem = PostItem(editedPost);
+            Loading(false);
 
+            var editedPostItem = PostItem(editedPost);
             int index = postPanel.Controls.IndexOf(selectedPostPanel);
             postPanel.Controls.RemoveAt(index);
             postPanel.Controls.Add(editedPostItem);
@@ -334,10 +338,10 @@ namespace VCLForum
             addPostTextBox.Clear();
         }
 
-        // Listen for post collection in DB
+        // Listen for Post collection in DB
         private void WatchForPostChanges(CancellationToken cancelToken)
         {
-            var collection = DBHandler.Instance.Database.GetCollection<Post>("Post");
+            var collection = DBHandler.Instance.Database.GetCollection<Post>(typeof(Post).Name);
             var options = new ChangeStreamOptions { FullDocument = ChangeStreamFullDocumentOption.UpdateLookup };
             var pipeline = new EmptyPipelineDefinition<ChangeStreamDocument<Post>>()
                .Match(change => change.OperationType == ChangeStreamOperationType.Insert && change.FullDocument.Thread == selectedThread);
