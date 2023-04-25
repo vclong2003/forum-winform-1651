@@ -5,6 +5,9 @@ namespace VCLForum
 {
     public partial class ForumForm : Form
     {
+        private static ForumForm instance = new ForumForm();
+        public static ForumForm Instance { get { return instance; } }
+
         private Panel? selectedSubforumPanel;
         private Subforum? selectedSubforum;
 
@@ -16,7 +19,7 @@ namespace VCLForum
 
         private CancellationTokenSource postsListenerCancelationTokenSource;
 
-        public ForumForm()
+        private ForumForm()
         {
             InitializeComponent();
             addSubforumGroup.Visible = false;

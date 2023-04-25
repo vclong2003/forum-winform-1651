@@ -2,7 +2,10 @@
 {
     public partial class RegisterForm : Form
     {
-        public RegisterForm()
+        private static RegisterForm instance = new RegisterForm();
+        public static RegisterForm Instance { get { return instance; } }
+
+        private RegisterForm()
         {
             InitializeComponent();
         }
@@ -20,7 +23,7 @@
         private void loginText_Click(object sender, EventArgs e)
         {
             this.Hide();
-            Program.loginForm.Show();
+            LoginForm.Instance.Show();
         }
 
         private void RegisterForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -49,7 +52,7 @@
             }
 
             Hide();
-            Program.loginForm.Show();
+            LoginForm.Instance.Show();
             return;
         }
     }

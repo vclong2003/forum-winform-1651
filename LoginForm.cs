@@ -2,19 +2,23 @@
 {
     public partial class LoginForm : Form
     {
-        public LoginForm()
+        private static LoginForm instance = new LoginForm();
+        public static LoginForm Instance { get { return instance; } }
+
+        private LoginForm()
         {
             InitializeComponent();
 
             participantBtn.Checked = true;
+
             //emailInput.Text = "vclong2003@gmail.com";
-            //pwdInput.Text = "12345678";
+            //pwdInput.Text = "1234";
         }
 
         private void registerText_Click(object sender, EventArgs e)
         {
             Hide();
-            Program.registerForm.Show();
+            RegisterForm.Instance.Show();
         }
 
         private void submitBtn_Click(object sender, EventArgs e)
@@ -47,7 +51,7 @@
             }
 
             Hide();
-            Program.forumForm.Show();
+            ForumForm.Instance.Show();
             return;
         }
 
