@@ -18,7 +18,7 @@ namespace VCLForum
             var filter = Builders<Participant>.Filter.Eq(user => user.Email, email);
             var cursor = collection.Find(filter);
 
-            if (cursor.Any()) return false;
+            if (cursor.Any()) return false; // User exsisted
 
             string hashedPassword = BCrypt.Net.BCrypt.HashPassword(password);
 
