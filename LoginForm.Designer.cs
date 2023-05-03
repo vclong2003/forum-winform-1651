@@ -140,7 +140,7 @@
             Name = "LoginForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "VCLForum Login";
-            Load += LoginForm_Load;
+            FormClosing += LoginForm_FormClosing;
             ResumeLayout(false);
             PerformLayout();
         }

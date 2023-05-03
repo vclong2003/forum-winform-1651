@@ -10,7 +10,7 @@ namespace VCLForum
 
         public Subforum CreateSubforum(string title)
         {
-            var collection = DBHandler.Instance.Database.GetCollection<Subforum>(typeof(Subforum).Name);
+            var collection = DBHandler.GetInstance().Database.GetCollection<Subforum>(typeof(Subforum).Name);
 
             Subforum newSubforum = new(this, title);
             collection.InsertOne(newSubforum);

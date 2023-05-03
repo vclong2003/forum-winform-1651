@@ -2,32 +2,20 @@
 {
     public partial class RegisterForm : Form
     {
-        private static RegisterForm instance = new RegisterForm();
-        public static RegisterForm Instance { get { return instance; } }
-
-        private RegisterForm()
+        public RegisterForm()
         {
             InitializeComponent();
-        }
-
-        private void RegisterForm_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void loginText_Click(object sender, EventArgs e)
         {
             this.Hide();
-            LoginForm.Instance.Show();
+            Program.loginForm.Show();
         }
 
         private void RegisterForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            DBHandler.CloseConnection();
             Environment.Exit(0);
         }
 
@@ -52,7 +40,7 @@
             }
 
             Hide();
-            LoginForm.Instance.Show();
+            Program.loginForm.Show();
             return;
         }
     }

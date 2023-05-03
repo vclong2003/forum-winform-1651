@@ -1,13 +1,9 @@
 ﻿using MongoDB.Driver;
-using System.Diagnostics;
 
 namespace VCLForum
 {
     public partial class ForumForm : Form
     {
-        private static ForumForm instance = new ForumForm();
-        public static ForumForm Instance { get { return instance; } }
-
         private Panel? selectedSubforumPanel;
         private Subforum? selectedSubforum;
 
@@ -19,7 +15,7 @@ namespace VCLForum
 
         private CancellationTokenSource postsListenerCancelationTokenSource;
 
-        private ForumForm()
+        public ForumForm()
         {
             InitializeComponent();
             addSubforumGroup.Visible = false;
@@ -46,7 +42,7 @@ namespace VCLForum
         private void LoadSubforum()
         {
             Loading(true);
-            var collection = DBHandler.Instance.Database.GetCollection<Subforum>(typeof(Subforum).Name);
+            var collection = DBHandler.GetInstance().Database.GetCollection<Subforum>(typeof(Subforum).Name);
             var filter = Builders<Subforum>.Filter.Empty;
 
             subforumPanel.Controls.Clear();
@@ -61,7 +57,7 @@ namespace VCLForum
         private void LoadThread()
         {
             Loading(true);
-            var collection = DBHandler.Instance.Database.GetCollection<Thread>(typeof(Thread).Name);
+            var collection = DBHandler.GetInstance().Database.GetCollection<Thread>(typeof(Thread).Name);
             var filter = Builders<Thread>.Filter.Eq(t => t.Subforum, selectedSubforum);
             var sort = Builders<Thread>.Sort.Descending(t => t.CreatedAt);
 
@@ -79,7 +75,7 @@ namespace VCLForum
         {
             Loading(true);
 
-            var collection = DBHandler.Instance.Database.GetCollection<Post>(typeof(Post).Name);
+            var collection = DBHandler.GetInstance().Database.GetCollection<Post>(typeof(Post).Name);
             var filter = Builders<Post>.Filter.Eq(p => p.Thread, selectedThread);
             var sort = Builders<Post>.Sort.Descending(p => p.PostDate);
 
@@ -344,7 +340,7 @@ namespace VCLForum
         // Listen for Post collection in DB
         private void WatchForPostChanges(CancellationToken cancelToken)
         {
-            var collection = DBHandler.Instance.Database.GetCollection<Post>(typeof(Post).Name);
+            var collection = DBHandler.GetInstance().Database.GetCollection<Post>(typeof(Post).Name);
             var options = new ChangeStreamOptions { FullDocument = ChangeStreamFullDocumentOption.UpdateLookup };
             var pipeline = new EmptyPipelineDefinition<ChangeStreamDocument<Post>>()
                .Match(change => change.OperationType == ChangeStreamOperationType.Insert && change.FullDocument.Thread == selectedThread);
@@ -358,7 +354,6 @@ namespace VCLForum
                     {
                         if (cancelToken.IsCancellationRequested) return;
                         var newPost = change.FullDocument;
-                        Debug.WriteLine(newPost.Content);
                         if (newPost.Creator.Id != Program.currentUser.Id)
                         {
                             this.Invoke((MethodInvoker)delegate { AddPostToPanel(newPost); });
@@ -379,6 +374,7 @@ namespace VCLForum
 
         private void ForumForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            DBHandler.CloseConnection();
             Environment.Exit(0);
         }
     }

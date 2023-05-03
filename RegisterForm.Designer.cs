@@ -46,7 +46,6 @@
             label1.Size = new Size(46, 20);
             label1.TabIndex = 0;
             label1.Text = "Email";
-            label1.Click += label1_Click;
             // 
             // label2
             // 
@@ -125,7 +124,6 @@
             StartPosition = FormStartPosition.CenterScreen;
             Text = "VCLForum Register";
             FormClosing += RegisterForm_FormClosing;
-            Load += RegisterForm_Load;
             ResumeLayout(false);
             PerformLayout();
         }

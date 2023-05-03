@@ -2,10 +2,7 @@
 {
     public partial class LoginForm : Form
     {
-        private static LoginForm instance = new LoginForm();
-        public static LoginForm Instance { get { return instance; } }
-
-        private LoginForm()
+        public LoginForm()
         {
             InitializeComponent();
 
@@ -18,7 +15,7 @@
         private void registerText_Click(object sender, EventArgs e)
         {
             Hide();
-            RegisterForm.Instance.Show();
+            Program.registerForm.Show();
         }
 
         private void submitBtn_Click(object sender, EventArgs e)
@@ -51,13 +48,14 @@
             }
 
             Hide();
-            ForumForm.Instance.Show();
+            Program.forumForm.Show();
             return;
         }
 
-        private void LoginForm_Load(object sender, EventArgs e)
+        private void LoginForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-
+            DBHandler.CloseConnection();
+            Environment.Exit(0);
         }
     }
 }

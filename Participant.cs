@@ -14,7 +14,7 @@ namespace VCLForum
 
         public static bool Register(string name, string email, string password)
         {
-            var collection = DBHandler.Instance.Database.GetCollection<Participant>(typeof(Participant).Name);
+            var collection = DBHandler.GetInstance().Database.GetCollection<Participant>(typeof(Participant).Name);
             var filter = Builders<Participant>.Filter.Eq(user => user.Email, email);
             var cursor = collection.Find(filter);
 
