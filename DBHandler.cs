@@ -18,25 +18,17 @@ namespace VCLForum
 
         public static DBHandler GetInstance()
         {
-            if (instance == null)
-            {
-                instance = new DBHandler();
-            }
-
+            if (instance == null) { instance = new DBHandler(); }
             return instance;
         }
 
         public static void CloseConnection()
         {
-            if (instance != null)
-            {
-                instance.client.Cluster.Dispose();
-                instance = null;
-                Debug.WriteLine("Connection closed!");
-                return;
-            }
+            if (instance == null) { return; }
 
-            Debug.WriteLine("Connection not initialized!");
+            instance.client.Cluster.Dispose();
+            instance = null;
+            Debug.WriteLine("Connection closed!");
         }
     }
 }

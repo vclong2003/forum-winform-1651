@@ -372,6 +372,7 @@ namespace VCLForum
             LoadThread();
         }
 
+        // Form close button event
         private void ForumForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             DBHandler.CloseConnection();
