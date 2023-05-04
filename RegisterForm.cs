@@ -33,15 +33,14 @@
 
             Cursor = Cursors.Default;
 
-            if (registerState == false)
+            if (registerState)
             {
-                MessageBox.Show("An error occurred!");
+                Hide();
+                Program.loginForm.Show();
                 return;
             }
 
-            Hide();
-            Program.loginForm.Show();
-            return;
+            MessageBox.Show("An error occurred!");
         }
     }
 }

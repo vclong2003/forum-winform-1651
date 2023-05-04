@@ -41,15 +41,14 @@
 
             Cursor = Cursors.Default;
 
-            if (loginState == false)
+            if (loginState)
             {
-                MessageBox.Show("Try again!");
+                Hide();
+                Program.forumForm.Show();
                 return;
             }
 
-            Hide();
-            Program.forumForm.Show();
-            return;
+            MessageBox.Show("Try again!");
         }
 
         private void LoginForm_FormClosing(object sender, FormClosingEventArgs e)
