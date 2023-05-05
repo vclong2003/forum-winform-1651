@@ -20,7 +20,7 @@ namespace VCLForum
 
             if (cursor.Any()) return false; // User exsisted
 
-            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(password);
+            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(password); // hash the password
 
             try { collection.InsertOne(new Participant(email, hashedPassword, name)); }
             catch (Exception e)
